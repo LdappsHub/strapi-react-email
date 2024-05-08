@@ -1,0 +1,75 @@
+{
+  "kind": "collectionType",
+  "collectionName": "react_email_template",
+  "info": {
+    "singularName": "react-email-template",
+    "pluralName": "react-email-templates",
+    "displayName": "Strapi react email template",
+    "description": "This package is wrapping https://react.email/"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "content-manager": {
+      "visible": true
+    },
+    "content-type-builder": {
+      "visible": false
+    },
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "isDefault": {
+      "type": "boolean",
+      "private": true
+    },
+    "name": {
+      "type": "string"
+    },
+    "shipperName": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "shipperEmail": {
+      "type": "string"
+    },
+    "testData": {
+      "type": "json"
+    },
+    "subject": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "responseEmail": {
+      "type": "string"
+    },
+    "originCode": {
+      "type": "richtext",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "transpiledCode": {
+      "type": "richtext",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    }
+  }
+
+}
