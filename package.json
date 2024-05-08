@@ -1,10 +1,10 @@
 {
   "name": "strapi-react-email",
-  "version": "0.0.0",
-  "description": "This is the description of the plugin.",
+  "version": "0.1.0",
+  "description": "Strapi react-email integration package",
   "strapi": {
     "name": "strapi-react-email",
-    "description": "Description of strapi-react-email plugin",
+    "description": "React-email integration with strapi",
     "kind": "plugin"
   },
   "dependencies": {
@@ -37,11 +37,11 @@
     "styled-components": "^5.2.1"
   },
   "author": {
-    "name": "A Strapi developer"
+    "name": "Daniel Lazar <daniel.lazar@ldapps.cz>"
   },
   "maintainers": [
     {
-      "name": "A Strapi developer"
+      "name": "Daniel Lazar <daniel.lazar@ldapps.cz>"
     }
   ],
   "engines": {
