@@ -19,7 +19,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
     return { html };
   },
-  async transpileFromData(originCode?: string, testData?: string) {
+  async transpileFromData(originCode: string, testData: string) {
     const compilerOptions = {
       target: ts.ScriptTarget.ES5,
       module: ts.ModuleKind.CommonJS,
