@@ -9,31 +9,38 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     if (!template) {
       throw new Error('Template for this id not found');
     }
+    const { compiledCode, html } = await strapi.plugin('strapi-react-email')
+      .service('reactEmail').transpileFromData(originCode || template.originCode, testData || template.testData);
+
+    await strapi.query('plugin::strapi-react-email.react-email-template').update( {
+      where: { id },
+      data: { transpiledCode: compiledCode }
+    });
+
+    return { html };
+  },
+  async transpileFromData(originCode?: string, testData?: string) {
     const compilerOptions = {
       target: ts.ScriptTarget.ES5,
       module: ts.ModuleKind.CommonJS,
       jsx: ts.JsxEmit.React,
     };
-    const result = ts.transpileModule(originCode ? originCode : template.originCode, { compilerOptions });
+
+    const result = ts.transpileModule(originCode, { compilerOptions });
     result.outputText += `\nresultHtml = render(Email({ ...emailProps }));`
     const compiledCode = result.outputText.replace('Object.defineProperty(exports, "__esModule", { value: true });', '');
-
-    await strapi.query('plugin::strapi-react-email.react-email-template').update( {
-      where: { id },
-      data: {transpiledCode: compiledCode}
-    });
 
     const context = {
       require,
       render,
       resultHtml: '',
-      emailProps: JSON.parse(testData ? testData : template.testData)
+      emailProps: JSON.parse(testData)
     }
     vm.createContext(context);
     const code = new vm.Script(compiledCode);
     await code.runInContext(context);
 
-    return { html: context.resultHtml };
+    return { html: context.resultHtml, compiledCode };
   },
   async sendTestEmail(id: number, to: string, originCode?: string, testData?: string) {
     const template = await strapi.query('plugin::strapi-react-email.react-email-template').findOne({where: { id } });
