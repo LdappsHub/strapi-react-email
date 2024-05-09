@@ -42,9 +42,21 @@ export default ({ strapi }: { strapi: Strapi }) => ({
 
     return { html: context.resultHtml, compiledCode };
   },
+  async sendTestEmailFromData(emailConfig: {
+    from: string,
+    to: string,
+    subject?: string,
+    replyTo?: string,
+    html?: string
+  }, originCode: string, testData: string) {
+    const { html } = await strapi.plugin('strapi-react-email')
+      .service('reactEmail').transpileFromData(originCode, testData);
+    emailConfig.html = html;
+    await strapi.plugin('email').service('email').send(emailConfig);
+  },
   async sendTestEmail(id: number, to: string, originCode?: string, testData?: string) {
     const template = await strapi.query('plugin::strapi-react-email.react-email-template').findOne({where: { id } });
-    const html = await strapi
+    const { html } = await strapi
       .plugin('strapi-react-email')
       .service('reactEmail').transpileReactEmail(id, originCode, testData);
 
@@ -52,7 +64,7 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       from: template.shipperEmail,
       to,
       subject: template.subject,
-      html: html.html,
+      html,
       replyTo: template.responseEmail
     };
     await strapi.plugin('email').service('email').send(emailConfig);
