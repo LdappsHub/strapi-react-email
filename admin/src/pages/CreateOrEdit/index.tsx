@@ -20,6 +20,7 @@ import {ITemplate} from "../HomePage";
 import { createContext, useContextSelector } from 'use-context-selector';
 import './style.css'
 import SelectLanguage, {I18nBaseQuery} from "../../components/SelectLanguage";
+import slugify from '@sindresorhus/slugify';
 
 export interface EditRouteParams {
   id?: string;  // Define other route parameters as needed
@@ -136,17 +137,33 @@ function TestEmail() {
   </Box>
 }
 
+const NameAndSlug = () => {
+  const setTemplate = useContextSelector(EditContext, v => v.setTemplate);
+  const name = useContextSelector(EditContext, v => v.template.name);
+  const isDefault = useContextSelector(EditContext, v => v.template.isDefault);
+
+  return <Box width='100%'>
+    <TextInput
+      placeholder="Name of email template"
+      label="Name" name="Name"
+      disabled={isDefault}
+      onChange={(e: HTMLInputElement) => setTemplate(s => ({...s, name: e.target.value, slug: slugify(e.target.value)}))} value={name || ''} />
+  </Box>
+
+}
+
 const CreateOrEdit = () => {
   const { id } = useParams<EditRouteParams>();
   const code = useContextSelector(EditContext, v => v.template.originCode);
   const name = useContextSelector(EditContext, v => v.template.name);
+  const slug = useContextSelector(EditContext, v => v.template.slug);
   const locale = useContextSelector(EditContext, v => v.template.locale);
   const subject = useContextSelector(EditContext, v => v.template.subject);
   const shipperName = useContextSelector(EditContext, v => v.template.shipperName);
   const shipperEmail = useContextSelector(EditContext, v => v.template.shipperEmail);
   const responseEmail = useContextSelector(EditContext, v => v.template.responseEmail);
   const testData = useContextSelector(EditContext, v => v.template.testData);
-  const isDefault = useContextSelector(EditContext, v => v.template.isDefault);
+
   const setTemplate = useContextSelector(EditContext, v => v.setTemplate);
   const [{ query }] = useQueryParams<I18nBaseQuery>();
   const history = useHistory();
@@ -246,13 +263,7 @@ const CreateOrEdit = () => {
               <TabPanels>
                 <TabPanel>
                   {!loading && <Flex direction='column' gap='20px'>
-                    <Box width='100%'>
-                      <TextInput
-                        placeholder="Name of email template"
-                        label="Name" name="Name"
-                        disabled={isDefault}
-                        onChange={(e: HTMLInputElement) => setTemplate(s => ({...s, name: e.target.value}))} value={name || ''} />
-                    </Box>
+                    <NameAndSlug/>
                     <Box width='100%'>
                       <TextInput
                         placeholder="Subject"
@@ -276,6 +287,14 @@ const CreateOrEdit = () => {
                         placeholder="Response email"
                         label="Response email" name="Response email"
                         onChange={(e: HTMLInputElement) => setTemplate(s => ({...s, responseEmail: e.target.value}))} value={responseEmail || ''} />
+                    </Box>
+                    <Box width='100%'>
+                      <TextInput
+                        placeholder="Slug"
+                        label="Slug" name="Slug"
+                        disabled
+                        onChange={(e: HTMLInputElement) => setTemplate(s => ({...s, slug: e.target.value}))} value={slug || ''}
+                      />
                     </Box>
                     <TestEmail/>
                   </Flex>}
@@ -332,6 +351,7 @@ function EditContextWrapper({children}: {children: ReactNode}) {
     shipperName: '',
     subject: '',
     testData: '',
+    slug: ''
   });
   const [saveRequired, setSaveRequired] = React.useState(false);
   const isFirstLoaded = useRef(0);

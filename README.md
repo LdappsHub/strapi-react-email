@@ -15,10 +15,18 @@ package to create modern emails.
 ```typescript
 strapi.plugin('strapi-react-email')
       .service('reactEmail')
-      .sendTestEmail(id, to, emailProps)
+      .sendTestEmail({
+        id,
+        slug,
+        to,
+        locale: 'en',
+        emailProps,
+      })
 ```
- - **id** - id of email template gathered from admin panel
+ - **id** - id of email template gathered from admin panel, could be undefined but slug must be used
+ - **slug** - slug prefer way how to use email template, could be undefined but id must be used
  - **to** - recipient
+ - **locale** - localization
  - **emailProps** - custom object which is passed to JSX/TSX code
 
 ## Limitation

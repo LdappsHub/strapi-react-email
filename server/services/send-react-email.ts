@@ -4,7 +4,8 @@ import vm from "vm";
 import {render} from "@react-email/render";
 
 export default ({ strapi }: { strapi: Strapi }) => ({
-  async transpileReactEmail(id: number, originCode?: string, testData?: string) {
+  async transpileReactEmail({id, originCode, testData}
+                              :{id: number, originCode?: string, testData?: string}) {
     const template = await strapi.query('plugin::strapi-react-email.react-email-template').findOne({where: { id } });
     if (!template) {
       throw new Error('Template for this id not found');
@@ -54,11 +55,12 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     emailConfig.html = html;
     await strapi.plugin('email').service('email').send(emailConfig);
   },
-  async sendTestEmail(id: number, to: string, originCode?: string, testData?: string) {
+  async sendTestEmail({id, to, originCode, testData}
+                        :{id: number, to: string, originCode?: string, testData?: string}) {
     const template = await strapi.query('plugin::strapi-react-email.react-email-template').findOne({where: { id } });
     const { html } = await strapi
       .plugin('strapi-react-email')
-      .service('reactEmail').transpileReactEmail(id, originCode, testData);
+      .service('reactEmail').transpileReactEmail({id, originCode, testData});
 
     const emailConfig = {
       from: template.shipperEmail,
@@ -69,8 +71,24 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     };
     await strapi.plugin('email').service('email').send(emailConfig);
   },
-  async sendEmail(id: number, to: string, emailProps: object) {
-    const template = await strapi.query('plugin::strapi-react-email.react-email-template').findOne({where: { id } });
+  async sendEmail({id, slug, locale, to, emailProps} : { id?: number, slug?: string, locale?: string, to: string, emailProps: string }) {
+    let where = {$or: [{ id }, {slug}] } as any
+    if(!id && slug) {
+      where = { slug };
+    }
+    if(id && !slug) {
+      where = { id };
+    }
+    if (locale) {
+      where = {
+        ...where,
+        locale
+      }
+    }
+    const template = await strapi.query('plugin::strapi-react-email.react-email-template').findOne({ where });
+    if (!template) {
+      throw new Error('Template for this id or slug not found');
+    }
     const context = {
       require,
       render,

@@ -48,6 +48,7 @@ function DeleteItem ({onDelete}: {onDelete: () => void}) {
 
 function Item ({index}: {index: number}) {
   const name = useContextSelector(EmailContext, v => v.list[index].name);
+  const slug = useContextSelector(EmailContext, v => v.list[index].slug);
   const id = useContextSelector(EmailContext, v => v.list[index].id);
   const isDefault = useContextSelector(EmailContext, v => v.list[index].isDefault);
   const setList = useContextSelector(EmailContext, v => v.setList);
@@ -73,6 +74,7 @@ function Item ({index}: {index: number}) {
       <BaseCheckbox aria-label={`Select ${name}`} />
     </Td>*/}
     <Td>{id}</Td>
+    <Td>{slug}</Td>
     <Td>{name}</Td>
     <Td>
       <Flex justifyContent='end'>
@@ -102,6 +104,9 @@ function List () {
           </Th>*/}
           <Th>
             <Typography variant="sigma">ID</Typography>
+          </Th>
+          <Th>
+            <Typography variant="sigma">Slug</Typography>
           </Th>
           <Th>
             <Typography variant="sigma">Name</Typography>
@@ -194,6 +199,7 @@ export interface ITemplate {
   testData: string;
   id?: number;
   name: string;
+  slug: string;
   locale?: string;
   isDefault: boolean;
   localizations?: ITemplate[];

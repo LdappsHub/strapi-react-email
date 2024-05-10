@@ -6,10 +6,24 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     if(!ctx.request.body.to) {
       ctx.badRequest('Missing "to" parameter');
     }
+    /*ctx.body = await strapi
+      .plugin('strapi-react-email')
+      .service('reactEmail')
+      .sendTestEmail({
+        id,
+        to: ctx.request?.body?.to,
+        originCode: ctx.request?.body?.template || undefined,
+        testData: ctx.request?.body?.testData || undefined
+      });*/
     ctx.body = await strapi
       .plugin('strapi-react-email')
       .service('reactEmail')
-      .sendTestEmail(id, ctx.request?.body?.to, ctx.request?.body?.template || undefined, ctx.request?.body?.testData || undefined);
+      .sendEmail({
+        slug: 'hello-strapi',
+        to: ctx.request?.body?.to,
+        locale: 'en',
+        emailProps: JSON.parse(ctx.request?.body?.testData) || undefined,
+      })
   },
   async transpileAndTest(ctx) {
     try {
@@ -17,7 +31,9 @@ export default ({ strapi }: { strapi: Strapi }) => ({
       ctx.body = await strapi
         .plugin('strapi-react-email')
         .service('reactEmail')
-        .transpileReactEmail(id, ctx.request?.body?.template || undefined, ctx.request?.body?.testData || undefined);
+        .transpileReactEmail({ id,
+          originCode: ctx.request?.body?.template || undefined,
+          testData: ctx.request?.body?.testData || undefined });
     } catch (e) {
       const body = {
         html: `

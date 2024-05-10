@@ -26,6 +26,9 @@
       "type": "boolean",
       "private": true
     },
+    "slug": {
+      "type": "string"
+    },
     "name": {
       "type": "string"
     },
