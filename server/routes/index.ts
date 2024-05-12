@@ -2,7 +2,7 @@ export default [
   {
     method: 'PUT',
     path: '/get-html/:id',
-    handler: 'reactEmail.transpileAndTest',
+    handler: 'reactEmail.transpile',
     config: {
       policies: [],
     },

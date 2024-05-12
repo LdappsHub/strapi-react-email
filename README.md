@@ -15,7 +15,7 @@ package to create modern emails.
 ```typescript
 strapi.plugin('strapi-react-email')
       .service('reactEmail')
-      .sendTestEmail({
+      .sendEmail({
         id,
         slug,
         to,

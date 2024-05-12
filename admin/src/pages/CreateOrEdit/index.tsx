@@ -11,7 +11,7 @@ import React, {
 } from "react";
 import pluginId from "../../pluginId";
 import {useHistory, useLocation, useParams} from 'react-router-dom';
-import {getFetchClient, useQueryParams} from "@strapi/helper-plugin";
+import {getFetchClient, useNotification, useQueryParams} from "@strapi/helper-plugin";
 import Prism from "prismjs";
 import 'prismjs/components/prism-jsx';
 import 'prismjs/themes/prism-okaidia.css';
@@ -32,6 +32,7 @@ function SaveButton() {
   const { id } = useParams<EditRouteParams>();
   const history = useHistory();
   const [loading, setLoading] = useState(false);
+  const toggleNotification = useNotification();
   const onSaveData = useCallback(async () => {
     setLoading(true);
     const { put, post } = getFetchClient();
@@ -55,8 +56,12 @@ function SaveButton() {
       }
 
       setSaveRequired(false);
-    } catch (err) {
-
+    } catch (err: any) {
+      toggleNotification({
+        type: 'warning',
+        message: `${err.message} ${err.response?.data?.error?.message}`,
+        timeout: 5000,
+      });
     }
     setLoading(false);
   }, [template])
@@ -110,14 +115,19 @@ function TestEmail() {
   const template = useContextSelector(EditContext, v => v.template.originCode);
   const testData = useContextSelector(EditContext, v => v.template.testData);
   const [loading, setLoading] = useState(false);
+  const toggleNotification = useNotification();
 
   const onclick = async () => {
     setLoading(true);
     try {
       const { put } = getFetchClient();
       await put('/strapi-react-email/send-test-email/' + id, {template, testData, to});
-    } catch (err) {
-
+    } catch (err: any) {
+      toggleNotification({
+        type: 'warning',
+        message: `${err.message} ${err.response?.data?.error?.message}`,
+        timeout: 5000,
+      });
     }
     setLoading(false);
   }

@@ -6,26 +6,22 @@ export default ({ strapi }: { strapi: Strapi }) => ({
     if(!ctx.request.body.to) {
       ctx.badRequest('Missing "to" parameter');
     }
-    /*ctx.body = await strapi
-      .plugin('strapi-react-email')
-      .service('reactEmail')
-      .sendTestEmail({
-        id,
-        to: ctx.request?.body?.to,
-        originCode: ctx.request?.body?.template || undefined,
-        testData: ctx.request?.body?.testData || undefined
-      });*/
-    ctx.body = await strapi
-      .plugin('strapi-react-email')
-      .service('reactEmail')
-      .sendEmail({
-        slug: 'hello-strapi',
-        to: ctx.request?.body?.to,
-        locale: 'en',
-        emailProps: JSON.parse(ctx.request?.body?.testData) || undefined,
-      })
+    try {
+      ctx.body = await strapi
+        .plugin('strapi-react-email')
+        .service('reactEmail')
+        .sendTestEmail({
+          id,
+          to: ctx.request?.body?.to,
+          originCode: ctx.request?.body?.template || undefined,
+          testData: ctx.request?.body?.testData || undefined
+        });
+    } catch (err) {
+      ctx.badRequest(err.message);
+    }
+
   },
-  async transpileAndTest(ctx) {
+  async transpile(ctx) {
     try {
       const { id } = ctx.params;
       ctx.body = await strapi
