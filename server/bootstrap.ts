@@ -6,7 +6,7 @@ export default async ({ strapi }: { strapi: Strapi }) => {
   // bootstrap phase
   const res = await strapi.query('plugin::strapi-react-email.react-email-template').findOne({where: { isDefault: true, name: 'Reset password' }});
   const locale = await strapi.query('plugin::i18n.locale').findOne({where: {id: 1}});
-  if(!res) {
+  if(!res && locale) {
 
     const resetCode = 'import * as React from \'react\';\n' +
       'import { \n' +
