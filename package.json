@@ -2,8 +2,13 @@
   "name": "strapi-react-email",
   "version": "0.1.0",
   "description": "Strapi react-email integration package",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LdappsHub/strapi-react-email"
+  },
   "strapi": {
     "name": "strapi-react-email",
+    "displayName": "Strapi react email",
     "description": "React-email integration with strapi",
     "kind": "plugin"
   },
@@ -34,7 +39,8 @@
     "react": "^17.0.0 || ^18.0.0",
     "react-dom": "^17.0.0 || ^18.0.0",
     "react-router-dom": "^5.2.0",
-    "styled-components": "^5.2.1"
+    "styled-components": "^5.2.1",
+    "@strapi/strapi": "^4.0.0"
   },
   "author": {
     "name": "Daniel Lazar <daniel.lazar@ldapps.cz>"
