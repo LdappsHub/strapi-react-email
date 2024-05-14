@@ -2,6 +2,9 @@
   "name": "strapi-react-email",
   "version": "0.1.0",
   "description": "Strapi react-email integration package",
+  "publishConfig":{
+    "registry":"https://registry.npmjs.org/"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/LdappsHub/strapi-react-email"
@@ -58,5 +61,14 @@
     "develop": "tsc -p tsconfig.server.json -w",
     "build": "tsc -p tsconfig.server.json"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "keywords": [
+    "strapi",
+    "email",
+    "react-email"
+  ],
+  "bugs": {
+    "url": "https://github.com/LdappsHub/strapi-react-email/issues"
+  },
+  "homepage": "https://github.com/LdappsHub/strapi-react-email#readme"
 }
