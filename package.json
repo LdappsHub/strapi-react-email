@@ -1,6 +1,6 @@
 {
   "name": "strapi-react-email",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Strapi react-email integration package",
   "publishConfig":{
     "registry":"https://registry.npmjs.org/"
@@ -70,5 +70,11 @@
   "bugs": {
     "url": "https://github.com/LdappsHub/strapi-react-email/issues"
   },
-  "homepage": "https://github.com/LdappsHub/strapi-react-email#readme"
+  "homepage": "https://github.com/LdappsHub/strapi-react-email#readme",
+  "files": [
+    "dist",
+    "admin",
+    "strapi-admin.js",
+    "strapi-server.js"
+  ]
 }
